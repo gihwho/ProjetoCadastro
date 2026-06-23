@@ -33,5 +33,5 @@ public class NinjaModel {
     // @ManyToOne um ninja tem uma única missão
     @ManyToOne
     @JoinColumn(name = "missoes_id") //Foreign Key ou chave estrangeira
-    private MissoesModel missoesModel;
+    private MissoesModel missoes;
 }
