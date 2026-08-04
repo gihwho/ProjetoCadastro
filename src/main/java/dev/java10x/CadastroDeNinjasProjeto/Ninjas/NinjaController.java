@@ -26,12 +26,12 @@ public class NinjaController {
         return "Mostrar todos ninjas por ID";
     }
 
-    @PutMapping("alterarId")
+    @PutMapping("/alterarId")
     public String alterarNinjaPorId() {
         return "Alterar Ninja Por ID";
     }
 
-    @DeleteMapping("deletar")
+    @DeleteMapping("/deletar")
     public String deletarNinjaPorId() {
         return "Deletar Ninja Por ID";
     }
