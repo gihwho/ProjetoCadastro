@@ -1,168 +1,146 @@
 # Cadastro de Ninjas
 
-Uma API RESTful para gerenciamento de cadastro de Ninjas desenvolvida com Spring Boot 4.1, JPA/Hibernate e banco de dados H2.
+API REST para cadastro e gestão de ninjas, com relacionamento com missões e persistência em banco H2 usando Spring Boot, JPA/Hibernate e Flyway.
 
----
+## Visão geral
 
-## Descrição do Projeto
+Este projeto foi desenvolvido como estudo prático com Java e Spring Boot, com foco em:
 
-Este projeto é uma aplicação backend que fornece endpoints para criar, listar, atualizar e deletar registros de Ninjas. É um projeto educacional que demonstra boas práticas de desenvolvimento com Spring Boot, incluindo persistência de dados com JPA/Hibernate.
+- CRUD de ninjas
+- relacionamento entre ninja e missão
+- persistência com JPA
+- migrações com Flyway
+- uso do banco H2 em ambiente local
 
----
+## Stack atual
 
-## Stack Tecnológico
+- Java 25
+- Spring Boot 4.1.0-M1
+- Spring Web MVC
+- Spring Data JPA
+- Hibernate ORM
+- H2 Database
+- Flyway
+- Lombok
+- Maven
 
-- **Java 25** - Linguagem de programação
-- **Spring Boot 4.1.0-M1** - Framework web
-- **Spring Data JPA** - Abstração de persistência
-- **Hibernate** - Implementação ORM
-- **H2 Database** - Banco de dados em memória
-- **Flyway** - Versionamento de migrations
-- **Lombok** - Redução de boilerplate
-- **Maven** - Gerenciador de dependências
+## Requisitos
 
-Para saber mais sobre essas tecnologias, veja [estudo/tecnologiasREADME.md](./estudo/tecnologiasREADME.md)
+- Java 25+
+- Maven 3.9+
+- Git
 
----
+## Como executar
 
-## Como Executar
+1. Clone o repositório:
 
-### Pré-requisitos
-- Java 25 ou superior instalado
-- Maven 3.6+ instalado
-
-### Passos
-
-1. **Clone o repositório**
 ```bash
-git clone <repository-url>
+git clone <url-do-repositorio>
 cd ProjetoCadastro
 ```
 
-2. **Execute a aplicação**
+2. Inicie a aplicação:
+
 ```bash
 ./mvnw spring-boot:run
 ```
 
-A aplicação será iniciada em `http://localhost:8080`
+3. Acesse a API em:
 
----
+- `http://localhost:8080`
+- Console H2: `http://localhost:8080/h2-console`
+
+## Estrutura do projeto
+
+```text
+ProjetoCadastro/
+├── README.md
+├── pom.xml
+├── mvnw
+├── .env
+├── data/
+│   └── CadastroDeNinjasDb.mv.db
+├── src/
+│   ├── main/
+│   │   ├── java/dev/java10x/CadastroDeNinjasProjeto/
+│   │   │   ├── CadastroDeNinjasProjetoApplication.java
+│   │   │   ├── Ninjas/
+│   │   │   │   ├── NinjaController.java
+│   │   │   │   ├── NinjaService.java
+│   │   │   │   ├── NinjaRepository.java
+│   │   │   │   ├── NinjaMapper.java
+│   │   │   │   ├── NinjaModel.java
+│   │   │   │   └── NinjaDto.java
+│   │   │   └── Missoes/
+│   │   │       ├── MissoesController.java
+│   │   │       ├── MissoesModel.java
+│   │   │       └── MissoesRepository.java
+│   │   └── resources/
+│   │       ├── application.properties
+│   │       └── db/
+│   │           └── migrations/
+│   │               └── V2__Add_rank_tb_cadastro.sql
+│   └── test/
+│       └── java/dev/java10x/CadastroDeNinjasProjeto/
+│           └── CadastroDeNinjasProjetoApplicationTests.java
+└── estudo/
+    └── tecnologiasREADME.md
+```
+
+## Modelo de dados
+
+A entidade principal é `NinjaModel`:
+
+- `id`
+- `nome`
+- `email`
+- `img_url`
+- `rank`
+- `idade`
+- `missoes` (relacionamento com `MissoesModel`)
+
+A entidade `MissoesModel` representa as missões associadas ao ninja:
+
+- `id`
+- `nomeMissao`
+- `dificuldadeMissao`
 
 ## Endpoints da API
 
 ### Ninjas
 
-| Método | Endpoint             | Descrição |
-|--------|----------------------|-----------|
+| Método | Endpoint | Descrição |
+|---|---|---|
 | GET | `/ninjas/boasvindas` | Mensagem de boas-vindas |
-| GET | `/ninjas/listar`     | Listar todos os Ninjas |
-| POST | `/ninjas/criar`      | Criar novo Ninja |
-| GET | `/ninjas/listar/id`  | Listar Ninja por ID |
-| PUT | `/ninjas/alterar/id` | Atualizar um Ninja |
-| DELETE | `/ninjas/deletar/id` | Deletar um Ninja |
+| POST | `/ninjas/criar` | Cria um ninja |
+| GET | `/ninjas/listar` | Lista todos os ninjas |
+| GET | `/ninjas/listar/{id}` | Busca ninja por id |
+| PATCH | `/ninjas/alterar/{id}` | Atualiza ninja por id |
+| DELETE | `/ninjas/deletar/{id}` | Remove ninja por id |
 
-### Exemplo de Requisição
+### Missões
 
-**GET** - Listar todos os Ninjas:
-```bash
-curl http://localhost:8080/ninjas/listar
-```
+| Método | Endpoint | Descrição |
+|---|---|---|
+| GET | `/missoes/listar` | Lista missões |
+| POST | `/missoes/criar` | Cria missão |
+| PUT | `/missoes/alterar` | Atualiza missão |
+| DELETE | `/missoes/deletar` | Remove missão |
 
-**POST** - Criar novo Ninja:
-```bash
-curl -X POST http://localhost:8080/ninjas/criar
-```
+## Banco de dados
 
----
+A aplicação usa H2 em modo arquivo para persistir os dados localmente na pasta `data/`.
 
-## Estrutura do Projeto
-
-```
-src/
-├── main/
-│   ├── java/dev/java10x/CadastroDeNinjasProjeto/
-│   │   ├── Ninjas/
-│   │   │   ├── NinjaController.java    # Endpoints da API
-│   │   │   ├── NinjaService.java       # Lógica de negócio
-│   │   │   ├── NinjaRepository.java    # Acesso aos dados
-│   │   │   └── NinjaModel.java         # Entidade/Modelo
-│   │   └── Application.java            # Classe principal
-│   └── resources/
-│       ├── db/migration/               # Scripts de migration (Flyway)
-│       └── application.properties      # Configurações
-└── test/                               # Testes unitários
-```
-
-### Padrão de Arquitetura
-
-O projeto segue o padrão de **3 camadas**:
-
-```
-Controller (Apresentação)
-    ↓
-Service (Negócio)
-    ↓
-Repository (Dados)
-    ↓
-Banco de Dados
-```
-
-1. **Controller** - Recebe requisições HTTP e retorna respostas
-2. **Service** - Implementa regras de negócio
-3. **Repository** - Acessa e persiste dados (via JPA/Hibernate)
-4. **Model** - Representa a entidade no banco
-
----
-
-## Configurações
-
-### application.properties
-
-As configurações da aplicação estão em `src/main/resources/application.properties`
-
----
-
-## Documentação Adicional
-
-- **[Guia de Tecnologias](./estudo/tecnologiasREADME.md)** - Explicação detalhada sobre JPA, Hibernate, ORM e Spring Data JPA
-- **[Spring Boot Documentation](https://spring.io/projects/spring-boot)**
-- **[JPA Specification](https://jakarta.ee/specifications/persistence/)**
-
----
+A configuração principal fica em `src/main/resources/application.properties`, e a aplicação também usa variáveis de ambiente para conexão com o banco.
 
 ## Testes
 
-Executar testes:
 ```bash
 ./mvnw test
 ```
 
----
+## Documentação adicional
 
-## Padrões de Código Utilizados
-
-- **REST API** - Arquitetura de serviços web
-- **MVC** - Model-View-Controller (adaptado para API)
-- **Dependency Injection** - Injeção de dependências com Spring
-- **ORM** - Object-Relational Mapping com Hibernate
-- **Repository Pattern** - Abstração de acesso a dados
-
----
-
-## Desenvolvido com
-
-- Spring Boot
-- Java
-- JPA/Hibernate
-- H2 Database
-- Maven
-
----
-
-## Licença
-
-Este projeto é fornecido como educacional.
-
----
-
-Desenvolvido para aprendizado de Spring Boot e Java
+- [Guia de tecnologias](./estudo/tecnologiasREADME.md)
+- [Spring Boot](https://spring.io/projects/spring-boot)
+- [JPA / Jakarta Persistence](https://jakarta.ee/specifications/persistence/)
