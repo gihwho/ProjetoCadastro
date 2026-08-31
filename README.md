@@ -56,7 +56,7 @@ cd ProjetoCadastro
 - API REST: `http://localhost:8080`
 - UI de gerenciamento: `http://localhost:8080/ninjas/ui/listar`
 - Console H2: `http://localhost:8080/h2-console`
-- Swagger UI: `http://localhost:8080/swagger-ui/index.html#/ninja-controller/listarNinjasPorId`
+- Swagger UI: `http://localhost:8080/swagger-ui/index.html#`
 
 ## Estrutura do projeto
 
