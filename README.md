@@ -1,32 +1,38 @@
 # Cadastro de Ninjas
 
-API REST para cadastro e gestão de ninjas, com relacionamento com missões e persistência em banco H2 usando Spring Boot, JPA/Hibernate e Flyway.
+Projeto em Java + Spring Boot para cadastro, listagem, edição, exclusão e visualização de ninjas, com relacionamento com missões e persistência em banco H2.
 
 ## Visão geral
 
-Este projeto foi desenvolvido como estudo prático com Java e Spring Boot, com foco em:
+Este projeto foi desenvolvido como estudo prático com foco em:
 
 - CRUD de ninjas
-- relacionamento entre ninja e missão
-- persistência com JPA
+- relacionamento com missões
+- uso de JPA/Hibernate
+- persistência em H2
 - migrações com Flyway
-- uso do banco H2 em ambiente local
+- consumo/visualização via Spring MVC + Thymeleaf
+- documentação de API com Swagger/OpenAPI
 
-## Stack atual
+## Stack utilizada
 
-- Java 25
-- Spring Boot 4.1.0-M1
-- Spring Web MVC
+- Java 21
+- Spring Boot 3.x
+- Spring Web
+- Spring MVC
 - Spring Data JPA
 - Hibernate ORM
 - H2 Database
 - Flyway
+- Thymeleaf
 - Lombok
 - Maven
+- Swagger / springdoc-openapi
+- dotenv / arquivo .env
 
-## Requisitos
+## Pré-requisitos
 
-- Java 25+
+- Java 21+
 - Maven 3.9+
 - Git
 
@@ -45,10 +51,12 @@ cd ProjetoCadastro
 ./mvnw spring-boot:run
 ```
 
-3. Acesse a API em:
+4. Acesse os pontos principais:
 
-- `http://localhost:8080`
+- API REST: `http://localhost:8080`
+- UI de gerenciamento: `http://localhost:8080/ninjas/ui/listar`
 - Console H2: `http://localhost:8080/h2-console`
+- Swagger UI: `http://localhost:8080/swagger-ui/index.html#/ninja-controller/listarNinjasPorId`
 
 ## Estrutura do projeto
 
@@ -66,6 +74,7 @@ ProjetoCadastro/
 │   │   │   ├── CadastroDeNinjasProjetoApplication.java
 │   │   │   ├── Ninjas/
 │   │   │   │   ├── NinjaController.java
+│   │   │   │   ├── NinjaControllerUi.java
 │   │   │   │   ├── NinjaService.java
 │   │   │   │   ├── NinjaRepository.java
 │   │   │   │   ├── NinjaMapper.java
@@ -77,19 +86,25 @@ ProjetoCadastro/
 │   │   │       └── MissoesRepository.java
 │   │   └── resources/
 │   │       ├── application.properties
+│   │       ├── templates/
+│   │       │   ├── listarNinjas.html
+│   │       │   ├── adicionarNinja.html
+│   │       │   ├── editarNinja.html
+│   │       │   └── detalhesNinja.html
 │   │       └── db/
 │   │           └── migrations/
 │   │               └── V2__Add_rank_tb_cadastro.sql
 │   └── test/
 │       └── java/dev/java10x/CadastroDeNinjasProjeto/
 │           └── CadastroDeNinjasProjetoApplicationTests.java
-└── estudo/
-    └── tecnologiasREADME.md
+├── estudo/
+│   └── tecnologiasREADME.md
+└── target/
 ```
 
 ## Modelo de dados
 
-A entidade principal é `NinjaModel`:
+### Ninja
 
 - `id`
 - `nome`
@@ -97,15 +112,15 @@ A entidade principal é `NinjaModel`:
 - `img_url`
 - `rank`
 - `idade`
-- `missoes` (relacionamento com `MissoesModel`)
+- `missoes`
 
-A entidade `MissoesModel` representa as missões associadas ao ninja:
+### Missão
 
 - `id`
 - `nomeMissao`
 - `dificuldadeMissao`
 
-## Endpoints da API
+## Endpoints da API REST
 
 ### Ninjas
 
@@ -127,11 +142,31 @@ A entidade `MissoesModel` representa as missões associadas ao ninja:
 | PUT | `/missoes/alterar` | Atualiza missão |
 | DELETE | `/missoes/deletar` | Remove missão |
 
+## UI do projeto
+
+Além da API REST, o projeto também possui páginas de interface com Thymeleaf:
+
+- `/ninjas/ui/listar` → listagem de ninjas
+- `/ninjas/ui/adicionar` → formulário de cadastro
+- `/ninjas/ui/listar/{id}` → detalhes do ninja
+- `/ninjas/ui/alterar/{id}` → formulário de edição
+- `/ninjas/ui/deletar/{id}` → exclusão
+
 ## Banco de dados
 
 A aplicação usa H2 em modo arquivo para persistir os dados localmente na pasta `data/`.
 
-A configuração principal fica em `src/main/resources/application.properties`, e a aplicação também usa variáveis de ambiente para conexão com o banco.
+A configuração principal fica em `src/main/resources/application.properties` e usa variáveis do arquivo `.env` para a conexão.
+
+## Swagger/OpenAPI
+
+A documentação da API foi habilitada com o Springdoc OpenAPI.
+
+Acesse:
+
+```text
+http://localhost:8080/swagger-ui/index.html#
+```
 
 ## Testes
 
@@ -139,8 +174,26 @@ A configuração principal fica em `src/main/resources/application.properties`, 
 ./mvnw test
 ```
 
+## Ferramentas e tecnologias usadas ao longo do projeto
+
+- Java
+- Spring Boot
+- Maven
+- JPA / Hibernate
+- Flyway
+- H2 Database
+- Thymeleaf
+- HTML/CSS
+- Spring MVC
+- Swagger / springdoc-openapi
+- Git
+- VS Code / IntelliJ IDEA
+- arquivo `.env` para variáveis de ambiente
+
 ## Documentação adicional
 
 - [Guia de tecnologias](./estudo/tecnologiasREADME.md)
 - [Spring Boot](https://spring.io/projects/spring-boot)
-- [JPA / Jakarta Persistence](https://jakarta.ee/specifications/persistence/)
+- [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
+- [Thymeleaf](https://www.thymeleaf.org/)
+- [Swagger UI](https://swagger.io/tools/swagger-ui/)
