@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tabela de Ninjas</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f8;
+            color: #1f2937;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+            font-size: 32px;
+            color: #111827;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        thead {
+            background-color: #111827;
+            color: white;
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        img {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #e5e7eb;
+        }
+
+        .ninja-name {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .rank {
+            display: inline-block;
+            padding: 6px 10px;
+            background-color: #ede9fe;
+            color: #6d28d9;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.14);
+        }
+
+        .btn-details {
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+            color: #0369a1;
+            border-color: #7dd3fc;
+        }
+
+        .btn-details:hover {
+            background: linear-gradient(135deg, #bae6fd, #7dd3fc);
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            border-color: #fcd34d;
+        }
+
+        .btn-edit:hover {
+            background: linear-gradient(135deg, #fde68a, #fcd34d);
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: #b91c1c;
+            border-color: #fca5a5;
+        }
+
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #fecaca, #fca5a5);
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Lista de Ninjas</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Imagem</th>
+        <th>Nome</th>
+        <th>Idade</th>
+        <th>Email</th>
+        <th>Rank</th>
+        <th>Missões</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="ninja : ${ninjas}">
+        <td th:text="${ninja.id}"></td>
+        <td><img th:src="${ninja.img_url}" alt="Imagem do ninja" /></td>
+        <td class="ninja-name" th:text="${ninja.nome}"></td>
+        <td th:text="${ninja.idade}"></td>
+        <td th:text="${ninja.email}"></td>
+        <td><span class="rank" th:text="${ninja.rank}"></span></td>
+        <td th:text="${ninja.missoes != null ? ninja.missoes.nomeMissao : 'Sem missão'}"></td>
+
+        <td class="actions">
+            <a th:href="@{/ninjas/ui/listar/{id}(id=${ninja.id})}" class="btn btn-details">Ver detalhes</a>
+            <a th:href="@{/ninjas/ui/alterar/{id}(id=${ninja.id})}" class="btn btn-edit">Alterar</a>
+            <a th:href="@{/ninjas/ui/deletar/{id}(id=${ninja.id})}" class="btn btn-delete">Deletar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/ninjas/ui/adicionar}" class="btn btn-details" style="margin-top: 20px; display: inline-block;">Adicionar Ninja</a>
+</body>
+</html>
